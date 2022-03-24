@@ -1,24 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Config from "./app/config.json";
 
 function App() {
+  const [data, setData] = useState(null);
+  const [query, setQuery] = useState("redux");
+  const [url, setUrl] = useState(`${Config.apiEndpoint}/api/v2/bodies`);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`${Config.apiEndpoint}/api/v2/bodies`, {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Authorization: `Basic ${btoa(`${Config.appId}:${Config.appSecret}`)}`,
+        },
+      })
+      .then((response) => {
+        setData(response.data.data);
+        setLoading(false);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {loading ? (
+        <div>Loading...</div>
+      ) : data ? (
+        <ul>
+          {data.bodies.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      ) : (
+        <div>no data</div>
+      )}
+    </>
   );
 }
 
