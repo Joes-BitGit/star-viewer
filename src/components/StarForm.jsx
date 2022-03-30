@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 export const StarForm = () => {
-  const [value, setValue] = useState("coconut");
+  const [value, setValue] = useState("and");
   // best way to store a static object?
   const constellations = {
     and: "Andromeda",
@@ -95,19 +95,23 @@ export const StarForm = () => {
     Vul: "Vulpecula",
   };
   const handleChange = (event) => {
-    setValue({ value: event.target.value });
+    setValue(event.target.value);
+    console.log(event.target.value);
   };
 
   const handleSubmit = (event) => {
-    alert("Your favorite flavor is: " + value);
+    alert("You have chosen: " + constellations[value]);
     event.preventDefault();
   };
 
   return (
-    <form onSubmit={() => handleSubmit()}>
+    <form onSubmit={(e) => handleSubmit(e)}>
       <label>
         Pick your Constellation:
-        <select value={value} onChange={() => handleChange()}>
+        <select value={value} onChange={(e) => handleChange(e)}>
+          <option value={value} aria-disabled disabled>
+            {constellations[value]}
+          </option>
           {/* You don't need to check hasOwnProperty when iterating on keys if you're using a simple object or one you made yourself with {}. */}
           {Object.keys(constellations).map((item) => (
             <option value={item} key={item}>
