@@ -2,6 +2,7 @@ import "./App.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Config from "./app/config.json";
+import { StarForm } from "./components/StarForm";
 
 function App() {
   const [data, setData] = useState(null);
@@ -12,6 +13,7 @@ function App() {
 
   useEffect(() => {
     setLoading(true);
+    // axios serves in a similar way to the fetch api that is native to the browser
     axios
       .get(`${Config.apiEndpoint}/api/v2/bodies`, {
         headers: {
@@ -28,7 +30,7 @@ function App() {
       .post(
         `${Config.apiEndpoint}/api/v2/studio/star-chart`,
         {
-          style: "inverted",
+          style: "default",
           observer: {
             latitude: 33.775867,
             longitude: -84.39733,
@@ -37,7 +39,7 @@ function App() {
           view: {
             type: "constellation",
             parameters: {
-              constellation: "aqr", // 3 letter constellation id
+              constellation: "vul", // 3 letter constellation id
             },
           },
         },
@@ -58,6 +60,7 @@ function App() {
 
   return (
     <>
+      <StarForm></StarForm>
       {loading ? (
         <div>Loading...</div>
       ) : data ? (
@@ -76,7 +79,7 @@ function App() {
       ) : (
         <div>no data</div>
       )}
-      {console.log(imageUrl)}
+      {console.log("APP: ", imageUrl)}
     </>
   );
 }
