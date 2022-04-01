@@ -6,10 +6,7 @@ import { StarForm } from "./components/StarForm";
 
 function App() {
   const [data, setData] = useState(null);
-  const [query, setQuery] = useState("redux");
-  const [url, setUrl] = useState(`${Config.apiEndpoint}/api/v2/bodies`);
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -31,40 +28,8 @@ function App() {
         setLoading(false);
       } catch (error) {}
     }
-    async function getStarChart() {
-      try {
-        const response = await axios.post(
-          `${Config.apiEndpoint}/api/v2/studio/star-chart`,
-          {
-            style: "default",
-            observer: {
-              latitude: 33.775867,
-              longitude: -84.39733,
-              date: "2019-12-20",
-            },
-            view: {
-              type: "constellation",
-              parameters: {
-                constellation: "vul", // 3 letter constellation id
-              },
-            },
-          },
-          {
-            headers: {
-              "X-Requested-With": "XMLHttpRequest",
-              Authorization: `Basic ${btoa(
-                `${Config.appId}:${Config.appSecret}`
-              )}`,
-            },
-          }
-        );
 
-        setImageUrl(response.data.data.imageUrl);
-        setLoading(false);
-      } catch (error) {}
-    }
     getBodies();
-    getStarChart();
     // axios
     //   .get(`${Config.apiEndpoint}/api/v2/bodies`, {
     //     headers: {
@@ -111,7 +76,6 @@ function App() {
 
   return (
     <>
-      <StarForm></StarForm>
       {loading ? (
         <div>Loading...</div>
       ) : data ? (
@@ -123,14 +87,7 @@ function App() {
       ) : (
         <div>no data</div>
       )}
-      {loading ? (
-        <div>Loading...</div>
-      ) : imageUrl ? (
-        <img alt="constellation" src={imageUrl} />
-      ) : (
-        <div>no data</div>
-      )}
-      {console.log("APP: ", imageUrl)}
+      {loading ? <div>Loading...</div> : <StarForm />}
     </>
   );
 }
