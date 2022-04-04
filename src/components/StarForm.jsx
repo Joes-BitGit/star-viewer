@@ -1,12 +1,11 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useStarChartApi } from "./useStarChartApi.jsx";
 
 export const StarForm = () => {
   const [query, setQuery] = useState("and");
 
   const [starStyle, setStarStyle] = useState("default");
-  const [{ imageUrl, loading }, doSubmit, doStyle] = useStarChartApi();
+  const [{ imageUrl, loading }, doParameters] = useStarChartApi();
 
   // best way to store a static object?
   const constellations = {
@@ -108,14 +107,16 @@ export const StarForm = () => {
   };
 
   const handleSubmit = (event) => {
-    doSubmit(query);
-    event.preventDefault();
+    // doSubmit(query);
+    doParameters({ style: starStyle, constellation: query });
 
+    event.preventDefault();
     alert("You have chosen: " + constellations[query]);
   };
 
   const handleStyleChange = (event) => {
-    doStyle(event.target.value);
+    setStarStyle(event.target.value);
+
     console.log("style: ", event.target.value);
   };
 
