@@ -5,8 +5,11 @@ import Config from "../app/config.json";
 export const useStarChartApi = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState("and");
-  const [starStyle, setStarStyle] = useState("default");
+  const [starParameters, setStarParameters] = useState({
+    style: "default",
+    constellation: "and",
+  });
+  console.log("START OF SCRIPT: ", starParameters);
 
   useEffect(() => {
     async function getStarChart() {
@@ -17,7 +20,7 @@ export const useStarChartApi = () => {
           `${Config.apiEndpoint}/api/v2/studio/star-chart`,
           // should be able to make this entire header editable to the user
           {
-            style: starStyle,
+            style: starParameters.style,
             observer: {
               latitude: 33.775867,
               longitude: -84.39733,
@@ -26,7 +29,7 @@ export const useStarChartApi = () => {
             view: {
               type: "constellation",
               parameters: {
-                constellation: submitted, // 3 letter constellation id
+                constellation: starParameters.constellation, // 3 letter constellation id
               },
             },
           },
@@ -50,7 +53,7 @@ export const useStarChartApi = () => {
       };
     }
     getStarChart();
-  }, [submitted]);
+  }, [starParameters]);
 
-  return [{ imageUrl, loading }, setSubmitted, setStarStyle];
+  return [{ imageUrl, loading }, setStarParameters];
 };
