@@ -5,6 +5,7 @@ import Config from "../app/config.json";
 export const useStarChartApi = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [starParameters, setStarParameters] = useState({
     style: "default",
     constellation: "and",
@@ -13,7 +14,9 @@ export const useStarChartApi = () => {
 
   useEffect(() => {
     async function getStarChart() {
+      setIsError(false);
       setLoading(true);
+
       let isMounted = true;
       try {
         const response = await axios.post(
@@ -46,6 +49,7 @@ export const useStarChartApi = () => {
 
         setLoading(false);
       } catch (error) {
+        setIsError(true);
         console.log("post error in starform");
       }
       return () => {
@@ -55,5 +59,5 @@ export const useStarChartApi = () => {
     getStarChart();
   }, [starParameters]);
 
-  return [{ imageUrl, loading }, setStarParameters];
+  return [{ imageUrl, loading, isError }, setStarParameters];
 };

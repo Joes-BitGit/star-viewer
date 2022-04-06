@@ -6,7 +6,7 @@ export const StarForm = () => {
   const [viewType, setViewType] = useState("constellation");
 
   const [starStyle, setStarStyle] = useState("default");
-  const [{ imageUrl, loading }, doParameters] = useStarChartApi();
+  const [{ imageUrl, loading, isError }, doParameters] = useStarChartApi();
 
   // best way to store a static object?
   const constellations = {
@@ -124,43 +124,48 @@ export const StarForm = () => {
   const handleViewForm = (event) => {
     setViewType(event.target.value);
   };
-  return loading ? (
-    <div>Lading...</div>
-  ) : (
+  return (
     <>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <label>
-          Pick View Type:
-          <select value={viewType} onChange={(e) => handleViewForm(e)}>
-            <option value={viewType}>area</option>
-            <option value={viewType}>constellation</option>
-          </select>
-        </label>
-        <br />
-        {/* if view type is constellation do this: */}
-        <label>
-          Pick your Constellation:
-          <select value={query} onChange={(e) => handleChange(e)}>
-            {/* You don't need to check hasOwnProperty when iterating on keys if you're using a simple object or one you made yourself with {}. */}
-            {Object.keys(constellations).map((item) => (
-              <option value={item} key={item}>
-                {constellations[item]}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Pick Your Style:
-          <select value={starStyle} onChange={(e) => handleStyleChange(e)}>
-            {StarStyles.map((styletype) => (
-              <option key={styletype}>{styletype}</option>
-            ))}
-          </select>
-        </label>
-        {/* Else if view type is area then find out the users ra, dec, and zoom */}
-        <input type="submit" value="Submit" />
-      </form>
-      <img src={imageUrl} alt={`constellation ${constellations[query]}`} />
+      {isError && <div>Something went wrong ...</div>}
+      {loading ? (
+        <div>Lading...</div>
+      ) : (
+        <>
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <label>
+              Pick View Type:
+              <select value={viewType} onChange={(e) => handleViewForm(e)}>
+                <option value={viewType}>area</option>
+                <option value={viewType}>constellation</option>
+              </select>
+            </label>
+            <br />
+            {/* if view type is constellation do this: */}
+            <label>
+              Pick your Constellation:
+              <select value={query} onChange={(e) => handleChange(e)}>
+                {/* You don't need to check hasOwnProperty when iterating on keys if you're using a simple object or one you made yourself with {}. */}
+                {Object.keys(constellations).map((item) => (
+                  <option value={item} key={item}>
+                    {constellations[item]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Pick Your Style:
+              <select value={starStyle} onChange={(e) => handleStyleChange(e)}>
+                {StarStyles.map((styletype) => (
+                  <option key={styletype}>{styletype}</option>
+                ))}
+              </select>
+            </label>
+            {/* Else if view type is area then find out the users ra, dec, and zoom */}
+            <input type="submit" value="Submit" />
+          </form>
+          <img src={imageUrl} alt={`constellation ${constellations[query]}`} />
+        </>
+      )}
     </>
   );
 };
