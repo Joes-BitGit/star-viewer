@@ -3,6 +3,7 @@ import { useStarChartApi } from "./useStarChartApi.jsx";
 
 export const StarForm = () => {
   const [query, setQuery] = useState("and");
+  const [viewType, setViewType] = useState("constellation");
 
   const [starStyle, setStarStyle] = useState("default");
   const [{ imageUrl, loading }, doParameters] = useStarChartApi();
@@ -120,11 +121,23 @@ export const StarForm = () => {
     console.log("style: ", event.target.value);
   };
 
+  const handleViewForm = (event) => {
+    setViewType(event.target.value);
+  };
   return loading ? (
     <div>Lading...</div>
   ) : (
     <>
       <form onSubmit={(e) => handleSubmit(e)}>
+        <label>
+          Pick View Type:
+          <select value={viewType} onChange={(e) => handleViewForm(e)}>
+            <option value={viewType}>area</option>
+            <option value={viewType}>constellation</option>
+          </select>
+        </label>
+        <br />
+        {/* if view type is constellation do this: */}
         <label>
           Pick your Constellation:
           <select value={query} onChange={(e) => handleChange(e)}>
@@ -144,7 +157,7 @@ export const StarForm = () => {
             ))}
           </select>
         </label>
-
+        {/* Else if view type is area then find out the users ra, dec, and zoom */}
         <input type="submit" value="Submit" />
       </form>
       <img src={imageUrl} alt={`constellation ${constellations[query]}`} />
