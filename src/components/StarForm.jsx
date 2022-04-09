@@ -6,7 +6,10 @@ export const StarForm = () => {
   const [viewType, setViewType] = useState("constellation");
 
   const [starStyle, setStarStyle] = useState("default");
-  const [{ imageUrl, loading, isError }, doParameters] = useStarChartApi();
+  const [{ imageUrl, loading, isError }, doParameters] = useStarChartApi({
+    style: "default",
+    constellation: "and",
+  });
 
   // best way to store a static object?
   const constellations = {
@@ -128,7 +131,7 @@ export const StarForm = () => {
     <>
       {isError && <div>Something went wrong ...</div>}
       {loading ? (
-        <div>Lading...</div>
+        <div>Loading for you lad...</div>
       ) : (
         <>
           <form onSubmit={(e) => handleSubmit(e)}>
