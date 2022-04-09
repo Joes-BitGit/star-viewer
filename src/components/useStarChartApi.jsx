@@ -2,13 +2,14 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Config from "../app/config.json";
 
-export const useStarChartApi = () => {
+// initData is an object passed in from the app component
+export const useStarChartApi = (initData) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [starParameters, setStarParameters] = useState({
-    style: "default",
-    constellation: "and",
+    style: initData.style,
+    constellation: initData.constellation,
   });
   console.log("START OF SCRIPT: ", starParameters);
 
