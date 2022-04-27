@@ -3,16 +3,24 @@ import { useStarChartApi } from "./useStarChartApi.jsx";
 import { ConstellationForm } from "./ConstellationForm.jsx";
 import { constellations } from "../data/Constellations.js";
 import { AreaForm } from "./AreaForm.jsx";
+import { useStarChartAreaApi } from "./useStarChartAreaApi.jsx";
 
 export const StarForm = () => {
   const [query, setQuery] = useState("and");
-  const [viewType, setViewType] = useState("constellation");
+  const [viewType, setViewType] = useState("area");
 
   const [starStyle, setStarStyle] = useState("default");
   const [{ imageUrl, loading, isError }, doParameters] = useStarChartApi({
     style: "default",
     constellation: "and",
+    view: "constellation",
   });
+  const [{ imageAreaUrl, loadingArea, isErrorArea }, doAreaParameters] =
+    useStarChartAreaApi({
+      rightAscension: 14.23,
+      declination: -15.21,
+      view: "area",
+    });
 
   const handleChange = (event) => {
     setQuery(event.target.value);
@@ -20,11 +28,18 @@ export const StarForm = () => {
   };
 
   const handleSubmit = (event) => {
-    // doSubmit(query);
-    doParameters({ style: starStyle, constellation: query });
+    if (viewType === "constellation") {
+      doParameters({ style: starStyle, constellation: query });
+    } else {
+      doAreaParameters({
+        rightAscension: 14.83,
+        declination: -15.21,
+        view: viewType,
+      });
+    }
 
     event.preventDefault();
-    alert("You have chosen: " + constellations[query]);
+    // alert("You have chosen: " + constellations[query]);
   };
 
   const handleStyleChange = (event) => {
@@ -62,14 +77,17 @@ export const StarForm = () => {
                 starStyle={starStyle}
               />
             ) : (
+              // Else if view type is area then find out the users ra, dec, and zoom
               <AreaForm />
             )}
 
-            {/* Else if view type is area then find out the users ra, dec, and zoom */}
             <input type="submit" value="Submit" />
           </form>
           {/* Should i not render anything initally? */}
-          <img src={imageUrl} alt={`constellation ${constellations[query]}`} />
+          <img
+            src={imageAreaUrl}
+            alt={`constellation ${constellations[query]}`}
+          />
         </>
       )}
     </>
