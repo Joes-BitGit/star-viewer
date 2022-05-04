@@ -19,16 +19,15 @@ export const useStarChartAreaApi = (initData) => {
       setLoading(true);
 
       let isMounted = true;
-
+      //  does not accept a date change returns 422 status code
       try {
         const response = await axios.post(
           `${Config.apiEndpoint}/api/v2/studio/star-chart`,
           // should be able to make this entire header editable to the user
           {
-            style: "inverted",
             observer: {
-              latitude: 33.775867,
-              longitude: -84.39733,
+              latitude: 34.775867,
+              longitude: -118.39733,
               date: "2019-12-20",
             },
             view: {
@@ -36,8 +35,8 @@ export const useStarChartAreaApi = (initData) => {
               parameters: {
                 position: {
                   equatorial: {
-                    rightAscension: 14.83,
-                    declination: -15.23,
+                    rightAscension: 18.83,
+                    declination: -45.23,
                   },
                 },
                 zoom: 3, //optional

@@ -19,6 +19,7 @@ export const useStarChartApi = (initData) => {
       setLoading(true);
 
       let isMounted = true;
+
       try {
         const response = await axios.post(
           `${Config.apiEndpoint}/api/v2/studio/star-chart`,
