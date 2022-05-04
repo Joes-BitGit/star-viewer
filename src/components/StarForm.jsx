@@ -17,8 +17,8 @@ export const StarForm = () => {
   });
   const [{ imageAreaUrl, loadingArea, isErrorArea }, doAreaParameters] =
     useStarChartAreaApi({
-      rightAscension: 14.23,
-      declination: -15.21,
+      rightAscension: 18.23,
+      declination: -45.21,
       view: "area",
     });
 
@@ -32,8 +32,8 @@ export const StarForm = () => {
       doParameters({ style: starStyle, constellation: query });
     } else {
       doAreaParameters({
-        rightAscension: 14.83,
-        declination: -15.21,
+        rightAscension: 18.83,
+        declination: -45.21,
         view: viewType,
       });
     }
