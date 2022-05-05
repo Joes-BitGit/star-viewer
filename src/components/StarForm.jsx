@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useStarChartApi } from "./useStarChartApi.jsx";
-import { ConstellationForm } from "./ConstellationForm.jsx";
-import { constellations } from "../data/Constellations.js";
+
 import { AreaForm } from "./AreaForm.jsx";
 import { useStarChartAreaApi } from "./useStarChartAreaApi.jsx";
+import { constellations, StarStyles } from "../data/Constellations";
 
 export const StarForm = () => {
   const [query, setQuery] = useState("and");
@@ -70,12 +70,30 @@ export const StarForm = () => {
             {/* if view type is constellation do this: */}
 
             {viewType === "constellation" ? (
-              <ConstellationForm
-                handleChange={handleChange}
-                query={query}
-                handleStyleChange={handleStyleChange}
-                starStyle={starStyle}
-              />
+              <>
+                <label>
+                  Pick your Constellation:
+                  <select value={query} onChange={(e) => handleChange(e)}>
+                    {/* You don't need to check hasOwnProperty when iterating on keys if you're using a simple object or one you made yourself with {}. */}
+                    {Object.keys(constellations).map((item) => (
+                      <option value={item} key={item}>
+                        {constellations[item]}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Pick Your Style:
+                  <select
+                    value={starStyle}
+                    onChange={(e) => handleStyleChange(e)}
+                  >
+                    {StarStyles.map((styletype) => (
+                      <option key={styletype}>{styletype}</option>
+                    ))}
+                  </select>
+                </label>
+              </>
             ) : (
               // Else if view type is area then find out the users ra, dec, and zoom
               <AreaForm />
@@ -85,7 +103,7 @@ export const StarForm = () => {
           </form>
           {/* Should i not render anything initally? */}
           <img
-            src={imageAreaUrl}
+            src={viewType === "constellation" ? imageUrl : imageAreaUrl}
             alt={`constellation ${constellations[query]}`}
           />
         </>
