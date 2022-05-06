@@ -28,8 +28,8 @@ export const useStarChartApi = (initData) => {
             style: starParameters.style,
             observer: {
               latitude: 33.775867,
-              longitude: -84.39733,
-              date: "2019-12-20",
+              longitude: -114.39733,
+              date: "2021-12-20",
             },
             view: {
               type: "constellation",
