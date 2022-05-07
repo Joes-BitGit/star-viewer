@@ -7,10 +7,12 @@ export const AreaForm = ({
   setDeclination,
 }) => {
   const handleRAChange = (event) => {
-    setRightAscension(event.target.value);
+    console.log("show ra change:", event.target.value);
+    // easier to ask for forgiveness rather than permission
+    setRightAscension(parseFloat(event.target.value));
   };
   const handleDecChange = (event) => {
-    setDeclination(event.target.value);
+    setDeclination(parseFloat(event.target.value));
   };
   return (
     <>
