@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Config from "../app/config.json";
 
 // initData is an object passed in from the app component
@@ -35,11 +35,11 @@ export const useStarChartAreaApi = (initData) => {
               parameters: {
                 position: {
                   equatorial: {
-                    rightAscension: 18.83,
-                    declination: -45.23,
+                    rightAscension: initData.rightAscension,
+                    declination: initData.declination,
                   },
                 },
-                zoom: 3, //optional
+                zoom: 4, //optional
               },
             },
           },
