@@ -3,13 +3,17 @@ import { useStarChartApi } from "./useStarChartApi.jsx";
 
 import { AreaForm } from "./AreaForm.jsx";
 import { useStarChartAreaApi } from "./useStarChartAreaApi.jsx";
-import { constellations, StarStyles } from "../data/Constellations";
+import { constellations } from "../data/Constellations";
+import { ConstellationForm } from "./ConstellationForm.jsx";
 
 export const StarForm = () => {
   const [query, setQuery] = useState("and");
   const [viewType, setViewType] = useState("area");
-
   const [starStyle, setStarStyle] = useState("default");
+
+  const [rightAscension, setRightAscension] = useState(18.23);
+  const [declination, setDeclination] = useState(-45.23);
+
   const [{ imageUrl, loading, isError }, doParameters] = useStarChartApi({
     style: "default",
     constellation: "and",
@@ -22,24 +26,18 @@ export const StarForm = () => {
       view: "area",
     });
 
-  const handleChange = (event) => {
-    setQuery(event.target.value);
-    console.log("constellation id: ", event.target.value);
-  };
-
   const handleSubmit = (event) => {
     if (viewType === "constellation") {
       doParameters({ style: starStyle, constellation: query });
     } else {
       doAreaParameters({
-        rightAscension: 18.83,
-        declination: -45.21,
+        rightAscension: rightAscension,
+        declination: declination,
         view: viewType,
       });
     }
 
     event.preventDefault();
-    // alert("You have chosen: " + constellations[query]);
   };
 
   const handleStyleChange = (event) => {
@@ -51,6 +49,7 @@ export const StarForm = () => {
   const handleViewForm = (event) => {
     setViewType(event.target.value);
   };
+
   return (
     <>
       {isError && <div>Something went wrong ...</div>}
@@ -70,33 +69,20 @@ export const StarForm = () => {
             {/* if view type is constellation do this: */}
 
             {viewType === "constellation" ? (
-              <>
-                <label>
-                  Pick your Constellation:
-                  <select value={query} onChange={(e) => handleChange(e)}>
-                    {/* You don't need to check hasOwnProperty when iterating on keys if you're using a simple object or one you made yourself with {}. */}
-                    {Object.keys(constellations).map((item) => (
-                      <option value={item} key={item}>
-                        {constellations[item]}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label>
-                  Pick Your Style:
-                  <select
-                    value={starStyle}
-                    onChange={(e) => handleStyleChange(e)}
-                  >
-                    {StarStyles.map((styletype) => (
-                      <option key={styletype}>{styletype}</option>
-                    ))}
-                  </select>
-                </label>
-              </>
+              <ConstellationForm
+                query={query}
+                setQuery={setQuery}
+                handleStyleChange={handleStyleChange}
+                starStyle={starStyle}
+              />
             ) : (
               // Else if view type is area then find out the users ra, dec, and zoom
-              <AreaForm />
+              <AreaForm
+                rightAscension={rightAscension}
+                setRightAscension={setRightAscension}
+                declination={declination}
+                setDeclination={setDeclination}
+              />
             )}
 
             <input type="submit" value="Submit" />
@@ -104,7 +90,11 @@ export const StarForm = () => {
           {/* Should i not render anything initally? */}
           <img
             src={viewType === "constellation" ? imageUrl : imageAreaUrl}
-            alt={`constellation ${constellations[query]}`}
+            alt={
+              viewType === "constellation"
+                ? `constellation ${constellations[query]}`
+                : `part of the night sky given ra and dec coordinates`
+            }
           />
         </>
       )}
