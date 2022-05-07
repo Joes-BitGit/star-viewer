@@ -6,9 +6,11 @@ import { useStarChartAreaApi } from "./useStarChartAreaApi.jsx";
 import { constellations } from "../data/Constellations";
 import { ConstellationForm } from "./ConstellationForm.jsx";
 
+import useIsMount from "./useIsMount.jsx";
+
 export const StarForm = () => {
   const [query, setQuery] = useState("and");
-  const [viewType, setViewType] = useState("area");
+  const [viewType, setViewType] = useState("constellation");
   const [starStyle, setStarStyle] = useState("default");
 
   const [rightAscension, setRightAscension] = useState(18.23);
@@ -50,11 +52,18 @@ export const StarForm = () => {
     setViewType(event.target.value);
   };
 
+  const isFirstRender = useIsMount();
   return (
     <>
-      {isError && <div>Something went wrong ...</div>}
-      {loading ? (
-        <div>Loading for you lad...</div>
+      {(isError || isErrorArea) && <div>Something went wrong ...</div>}
+      {loading || loadingArea ? (
+        viewType === "area" ? (
+          <div>Loading the Area for you lad...</div>
+        ) : (
+          <div>
+            Loading the Constellation {constellations[query]} you lad...
+          </div>
+        )
       ) : (
         <>
           <form onSubmit={(e) => handleSubmit(e)}>
@@ -87,15 +96,17 @@ export const StarForm = () => {
 
             <input type="submit" value="Submit" />
           </form>
-          {/* Should i not render anything initally? */}
-          <img
-            src={viewType === "constellation" ? imageUrl : imageAreaUrl}
-            alt={
-              viewType === "constellation"
-                ? `constellation ${constellations[query]}`
-                : `part of the night sky given ra and dec coordinates`
-            }
-          />
+
+          {!isFirstRender && (
+            <img
+              src={viewType === "constellation" ? imageUrl : imageAreaUrl}
+              alt={
+                viewType === "constellation"
+                  ? `constellation ${constellations[query]}`
+                  : `part of the night sky given ra and dec coordinates`
+              }
+            />
+          )}
         </>
       )}
     </>
