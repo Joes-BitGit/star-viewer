@@ -1,12 +1,16 @@
 import React from "react";
 import { constellations, StarStyles } from "../data/Constellations";
 
-export const ConstellationForm = (
-  handleChange,
+export const ConstellationForm = ({
   query,
+  setQuery,
   handleStyleChange,
-  starStyle
-) => {
+  starStyle,
+}) => {
+  const handleChange = (event) => {
+    setQuery(event.target.value);
+  };
+
   return (
     <>
       <label>
