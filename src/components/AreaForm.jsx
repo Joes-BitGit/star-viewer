@@ -1,22 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 
-export const AreaForm = () => {
-  function getLocation() {
-    navigator.geolocation.getCurrentPosition(showLoc);
-  }
-  function showLoc(pos) {
-    let latitude = `${pos.coords.latitude}`;
-    let longitude = `${pos.coords.longitude}`;
-    let coordinates = { latitude, longitude };
-    return coordinates;
-  }
+export const AreaForm = ({
+  rightAscension,
+  setRightAscension,
+  declination,
+  setDeclination,
+}) => {
+  const handleRAChange = (event) => {
+    setRightAscension(event.target.value);
+  };
+  const handleDecChange = (event) => {
+    setDeclination(event.target.value);
+  };
   return (
     <>
       <label>
-        Equatorial Position:
-        <button onClick={() => getLocation}>Show Location</button>
-        <div className="">latitude: 33.775867,</div>
-        <div className="">longitude: -84.39733,</div>
+        Right Ascension:
+        <input
+          name="rightAscension"
+          type="number"
+          value={rightAscension}
+          onChange={(e) => handleRAChange(e)}
+        />
+      </label>
+      <label>
+        Declination:
+        <input
+          name="declination"
+          type="number"
+          value={declination}
+          onChange={(e) => handleDecChange(e)}
+        />
       </label>
     </>
   );
