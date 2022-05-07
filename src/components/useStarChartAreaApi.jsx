@@ -18,8 +18,9 @@ export const useStarChartAreaApi = (initData) => {
       setIsError(false);
       setLoading(true);
 
-      let isMounted = true;
+      let isCancelled = false;
       //  does not accept a date change returns 422 status code
+      console.log(starParameters);
       try {
         const response = await axios.post(
           `${Config.apiEndpoint}/api/v2/studio/star-chart`,
@@ -35,8 +36,8 @@ export const useStarChartAreaApi = (initData) => {
               parameters: {
                 position: {
                   equatorial: {
-                    rightAscension: initData.rightAscension,
-                    declination: initData.declination,
+                    rightAscension: starParameters.rightAscension,
+                    declination: starParameters.declination,
                   },
                 },
                 zoom: 4, //optional
@@ -52,7 +53,7 @@ export const useStarChartAreaApi = (initData) => {
             },
           }
         );
-        if (isMounted) setImageAreaUrl(response.data.data.imageUrl);
+        if (!isCancelled) setImageAreaUrl(response.data.data.imageUrl);
 
         setLoading(false);
       } catch (error) {
@@ -60,7 +61,7 @@ export const useStarChartAreaApi = (initData) => {
         console.log("post error in areaform");
       }
       return () => {
-        isMounted = false;
+        isCancelled = true;
       };
     }
     getStarChart();

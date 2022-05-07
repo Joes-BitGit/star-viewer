@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Config from "../app/config.json";
 
 // initData is an object passed in from the app component
@@ -11,14 +11,14 @@ export const useStarChartApi = (initData) => {
     style: initData.style,
     constellation: initData.constellation,
   });
-  console.log("START OF SCRIPT: ", starParameters);
+  // console.log("START OF SCRIPT: ", starParameters);
 
   useEffect(() => {
     async function getStarChart() {
       setIsError(false);
       setLoading(true);
 
-      let isMounted = true;
+      let isCancelled = false;
 
       try {
         const response = await axios.post(
@@ -47,7 +47,7 @@ export const useStarChartApi = (initData) => {
             },
           }
         );
-        if (isMounted) setImageUrl(response.data.data.imageUrl);
+        if (!isCancelled) setImageUrl(response.data.data.imageUrl);
 
         setLoading(false);
       } catch (error) {
@@ -55,7 +55,7 @@ export const useStarChartApi = (initData) => {
         console.log("post error in starform");
       }
       return () => {
-        isMounted = false;
+        isCancelled = true;
       };
     }
     getStarChart();
