@@ -10,7 +10,7 @@ import useIsMount from "./useIsMount.jsx";
 
 export const StarForm = () => {
   const [query, setQuery] = useState("and");
-  const [viewType, setViewType] = useState("constellation");
+  const [viewType, setViewType] = useState("area");
   const [starStyle, setStarStyle] = useState("default");
 
   const [rightAscension, setRightAscension] = useState(18.23);
@@ -24,11 +24,15 @@ export const StarForm = () => {
   const [{ imageAreaUrl, loadingArea, isErrorArea }, doAreaParameters] =
     useStarChartAreaApi({
       rightAscension: 18.23,
-      declination: -45.21,
+      declination: -45.23,
       view: "area",
     });
 
   const handleSubmit = (event) => {
+    console.log("at time of submission");
+    console.log("constellaiton: ", starStyle, query);
+    console.log("area: ", rightAscension, declination, viewType);
+
     if (viewType === "constellation") {
       doParameters({ style: starStyle, constellation: query });
     } else {
@@ -40,12 +44,6 @@ export const StarForm = () => {
     }
 
     event.preventDefault();
-  };
-
-  const handleStyleChange = (event) => {
-    setStarStyle(event.target.value);
-
-    console.log("style: ", event.target.value);
   };
 
   const handleViewForm = (event) => {
@@ -81,7 +79,7 @@ export const StarForm = () => {
               <ConstellationForm
                 query={query}
                 setQuery={setQuery}
-                handleStyleChange={handleStyleChange}
+                setStarStyle={setStarStyle}
                 starStyle={starStyle}
               />
             ) : (
@@ -97,7 +95,7 @@ export const StarForm = () => {
             <input type="submit" value="Submit" />
           </form>
 
-          {!isFirstRender && (
+          {!isFirstRender ? (
             <img
               src={viewType === "constellation" ? imageUrl : imageAreaUrl}
               alt={
@@ -106,6 +104,8 @@ export const StarForm = () => {
                   : `part of the night sky given ra and dec coordinates`
               }
             />
+          ) : (
+            console.log("first render")
           )}
         </>
       )}
