@@ -4,11 +4,17 @@ import { constellations, StarStyles } from "../data/Constellations";
 export const ConstellationForm = ({
   query,
   setQuery,
-  handleStyleChange,
+  setStarStyle,
   starStyle,
 }) => {
   const handleChange = (event) => {
     setQuery(event.target.value);
+  };
+
+  const handleStyleChange = (event) => {
+    setStarStyle(event.target.value);
+
+    console.log("style: ", event.target.value);
   };
 
   return (
