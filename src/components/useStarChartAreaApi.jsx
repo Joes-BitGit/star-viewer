@@ -20,7 +20,6 @@ export const useStarChartAreaApi = (initData) => {
 
       let isCancelled = false;
       //  does not accept a date change returns 422 status code
-      console.log(starParameters);
       try {
         const response = await axios.post(
           `${Config.apiEndpoint}/api/v2/studio/star-chart`,
@@ -29,10 +28,10 @@ export const useStarChartAreaApi = (initData) => {
             observer: {
               latitude: 34.775867,
               longitude: -118.39733,
-              date: "2019-12-20",
+              date: "2021-12-25",
             },
             view: {
-              type: "area",
+              type: starParameters.view,
               parameters: {
                 position: {
                   equatorial: {
@@ -53,6 +52,7 @@ export const useStarChartAreaApi = (initData) => {
             },
           }
         );
+        console.log("current star Parameters:", starParameters);
         if (!isCancelled) setImageAreaUrl(response.data.data.imageUrl);
 
         setLoading(false);
