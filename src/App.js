@@ -26,7 +26,9 @@ function App() {
         );
         setData(response.data.data);
         setLoading(false);
-      } catch (error) {}
+      } catch (error) {
+        console.log("err in fetch of getBodies");
+      }
     }
 
     getBodies();
@@ -85,9 +87,9 @@ function App() {
           ))}
         </ul>
       ) : (
-        <div>no data</div>
+        <div>no data available at the moment</div>
       )}
-      {loading ? <div>Loading...</div> : <StarForm />}
+      <StarForm />
     </>
   );
 }
