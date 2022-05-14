@@ -13,7 +13,8 @@ export const StarForm = () => {
   const [viewType, setViewType] = useState("area");
   const [starStyle, setStarStyle] = useState("default");
 
-  const [rightAscension, setRightAscension] = useState(18.23);
+  // not all values will work given the date and location
+  const [rightAscension, setRightAscension] = useState(20.23);
   const [declination, setDeclination] = useState(-45.23);
 
   const [{ imageUrl, loading, isError }, doParameters] = useStarChartApi({
@@ -23,7 +24,7 @@ export const StarForm = () => {
   });
   const [{ imageAreaUrl, loadingArea, isErrorArea }, doAreaParameters] =
     useStarChartAreaApi({
-      rightAscension: 18.23,
+      rightAscension: 20.23,
       declination: -45.23,
       view: "area",
     });
