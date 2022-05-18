@@ -7,6 +7,8 @@ import { constellations } from "../data/Constellations";
 import { ConstellationForm } from "./ConstellationForm.jsx";
 
 import useIsMount from "./useIsMount.jsx";
+import { Container, FloatingLabel, Form } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 export const StarForm = () => {
   const [query, setQuery] = useState("and");
@@ -60,54 +62,60 @@ export const StarForm = () => {
           <div>Loading the Area for you lad...</div>
         ) : (
           <div>
-            Loading the Constellation {constellations[query]} you lad...
+            Loading the Constellation {constellations[query]} for you lad...
           </div>
         )
       ) : (
         <>
-          <form onSubmit={(e) => handleSubmit(e)}>
-            <label>
-              Pick View Type:
-              <select value={viewType} onChange={(e) => handleViewForm(e)}>
-                <option value="constellation">constellation</option>
-                <option value="area">area</option>
-              </select>
-            </label>
-            <br />
-            {/* if view type is constellation do this: */}
+          <Container>
+            <Form onSubmit={(e) => handleSubmit(e)}>
+              <FloatingLabel label="Pick View Type:">
+                <Form.Select
+                  aria-label="form select"
+                  value={viewType}
+                  onChange={(e) => handleViewForm(e)}
+                >
+                  <option value="constellation">Constellation</option>
+                  <option value="area">Area</option>
+                </Form.Select>
+              </FloatingLabel>
+              {/* if view type is constellation do this: */}
 
-            {viewType === "constellation" ? (
-              <ConstellationForm
-                query={query}
-                setQuery={setQuery}
-                setStarStyle={setStarStyle}
-                starStyle={starStyle}
+              {viewType === "constellation" ? (
+                <ConstellationForm
+                  query={query}
+                  setQuery={setQuery}
+                  setStarStyle={setStarStyle}
+                  starStyle={starStyle}
+                />
+              ) : (
+                // Else if view type is area then find out the users ra, dec, and zoom
+                <AreaForm
+                  rightAscension={rightAscension}
+                  setRightAscension={setRightAscension}
+                  declination={declination}
+                  setDeclination={setDeclination}
+                />
+              )}
+
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </Form>
+
+            {!isFirstRender ? (
+              <img
+                src={viewType === "constellation" ? imageUrl : imageAreaUrl}
+                alt={
+                  viewType === "constellation"
+                    ? `constellation ${constellations[query]}`
+                    : `part of the night sky given ra and dec coordinates`
+                }
               />
             ) : (
-              // Else if view type is area then find out the users ra, dec, and zoom
-              <AreaForm
-                rightAscension={rightAscension}
-                setRightAscension={setRightAscension}
-                declination={declination}
-                setDeclination={setDeclination}
-              />
+              console.log("first render")
             )}
-
-            <input type="submit" value="Submit" />
-          </form>
-
-          {!isFirstRender ? (
-            <img
-              src={viewType === "constellation" ? imageUrl : imageAreaUrl}
-              alt={
-                viewType === "constellation"
-                  ? `constellation ${constellations[query]}`
-                  : `part of the night sky given ra and dec coordinates`
-              }
-            />
-          ) : (
-            console.log("first render")
-          )}
+          </Container>
         </>
       )}
     </>
