@@ -9,6 +9,7 @@ import { ConstellationForm } from "./ConstellationForm.jsx";
 import useIsMount from "./useIsMount.jsx";
 import { Container, FloatingLabel, Form } from "react-bootstrap";
 import { Button } from "react-bootstrap";
+import Image from "react-bootstrap/Image";
 
 export const StarForm = () => {
   const [query, setQuery] = useState("and");
@@ -69,7 +70,10 @@ export const StarForm = () => {
         <>
           <Container>
             <Form onSubmit={(e) => handleSubmit(e)}>
-              <FloatingLabel label="Pick View Type:">
+              <FloatingLabel
+                label="Pick View Type:"
+                className="mb-3 border border-primary"
+              >
                 <Form.Select
                   aria-label="form select"
                   value={viewType}
@@ -80,31 +84,33 @@ export const StarForm = () => {
                 </Form.Select>
               </FloatingLabel>
               {/* if view type is constellation do this: */}
+              <Container className="mb-3 pt-3 bg-light rounded border border-dark">
+                {viewType === "constellation" ? (
+                  <ConstellationForm
+                    query={query}
+                    setQuery={setQuery}
+                    setStarStyle={setStarStyle}
+                    starStyle={starStyle}
+                  />
+                ) : (
+                  // Else if view type is area then find out the users ra, dec, and zoom
+                  <AreaForm
+                    rightAscension={rightAscension}
+                    setRightAscension={setRightAscension}
+                    declination={declination}
+                    setDeclination={setDeclination}
+                  />
+                )}
 
-              {viewType === "constellation" ? (
-                <ConstellationForm
-                  query={query}
-                  setQuery={setQuery}
-                  setStarStyle={setStarStyle}
-                  starStyle={starStyle}
-                />
-              ) : (
-                // Else if view type is area then find out the users ra, dec, and zoom
-                <AreaForm
-                  rightAscension={rightAscension}
-                  setRightAscension={setRightAscension}
-                  declination={declination}
-                  setDeclination={setDeclination}
-                />
-              )}
-
-              <Button variant="primary" type="submit">
-                Submit
-              </Button>
+                <Button variant="primary" type="submit" className="mb-3">
+                  Submit
+                </Button>
+              </Container>
             </Form>
 
             {!isFirstRender ? (
-              <img
+              <Image
+                fluid
                 src={viewType === "constellation" ? imageUrl : imageAreaUrl}
                 alt={
                   viewType === "constellation"
