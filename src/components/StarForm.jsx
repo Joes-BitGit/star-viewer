@@ -109,15 +109,19 @@ export const StarForm = () => {
             </Form>
 
             {!isFirstRender ? (
-              <Image
-                fluid
-                src={viewType === "constellation" ? imageUrl : imageAreaUrl}
-                alt={
-                  viewType === "constellation"
-                    ? `constellation ${constellations[query]}`
-                    : `part of the night sky given ra and dec coordinates`
-                }
-              />
+              <Container className="text-center mb-3">
+                <Image
+                  fluid
+                  rounded
+                  className="border border-info"
+                  src={viewType === "constellation" ? imageUrl : imageAreaUrl}
+                  alt={
+                    viewType === "constellation"
+                      ? `constellation ${constellations[query]}`
+                      : `part of the night sky given ra and dec coordinates`
+                  }
+                />
+              </Container>
             ) : (
               console.log("first render")
             )}
