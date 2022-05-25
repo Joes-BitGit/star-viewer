@@ -10,6 +10,7 @@ import useIsMount from "./useIsMount.jsx";
 import { Container, FloatingLabel, Form } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
+import { MoonForm } from "./MoonForm.jsx";
 
 export const StarForm = () => {
   const [query, setQuery] = useState("and");
@@ -19,6 +20,13 @@ export const StarForm = () => {
   // not all values will work given the date and location
   const [rightAscension, setRightAscension] = useState(20.23);
   const [declination, setDeclination] = useState(-45.23);
+
+  //moon states
+  const [format, setFormat] = useState("x");
+  const [style, setStyle] = useState("style");
+  const [background, setBackground] = useState("bg");
+  const [orientation, setOrientation] = useState("simple");
+  const [type, setType] = useState("type");
 
   const [{ imageUrl, loading, isError }, doParameters] = useStarChartApi({
     style: "default",
@@ -94,12 +102,26 @@ export const StarForm = () => {
                   />
                 ) : (
                   // Else if view type is area then find out the users ra, dec, and zoom
-                  <AreaForm
-                    rightAscension={rightAscension}
-                    setRightAscension={setRightAscension}
-                    declination={declination}
-                    setDeclination={setDeclination}
-                  />
+                  <>
+                    <AreaForm
+                      rightAscension={rightAscension}
+                      setRightAscension={setRightAscension}
+                      declination={declination}
+                      setDeclination={setDeclination}
+                    />
+                    <MoonForm
+                      format={format}
+                      setFormat={setFormat}
+                      style={style}
+                      setStyle={setStyle}
+                      background={background}
+                      setBackground={setBackground}
+                      orientation={orientation}
+                      setOrientation={setOrientation}
+                      type={type}
+                      setType={setType}
+                    />
+                  </>
                 )}
 
                 <Button variant="primary" type="submit" className="mb-3">
