@@ -14,7 +14,7 @@ import { MoonForm } from "./MoonForm.jsx";
 
 export const StarForm = () => {
   const [query, setQuery] = useState("and");
-  const [viewType, setViewType] = useState("area");
+  const [viewType, setViewType] = useState("constellation");
   const [starStyle, setStarStyle] = useState("default");
 
   // not all values will work given the date and location
@@ -22,23 +22,23 @@ export const StarForm = () => {
   const [declination, setDeclination] = useState(-45.23);
 
   //moon states
-  const [format, setFormat] = useState("x");
-  const [style, setStyle] = useState("style");
-  const [background, setBackground] = useState("bg");
-  const [orientation, setOrientation] = useState("simple");
-  const [type, setType] = useState("type");
+  const [format, setFormat] = useState("png");
+  const [style, setStyle] = useState("default");
+  const [background, setBackground] = useState("stars");
+  const [orientation, setOrientation] = useState("portrait-simple");
+  const [type, setType] = useState("north-up");
 
   const [{ imageUrl, loading, isError }, doParameters] = useStarChartApi({
     style: "default",
     constellation: "and",
     view: "constellation",
   });
-  const [{ imageAreaUrl, loadingArea, isErrorArea }, doAreaParameters] =
-    useStarChartAreaApi({
-      rightAscension: 20.23,
-      declination: -45.23,
-      view: "area",
-    });
+  // const [{ imageAreaUrl, loadingArea, isErrorArea }, doAreaParameters] =
+  //   useStarChartAreaApi({
+  //     rightAscension: 20.23,
+  //     declination: -45.23,
+  //     view: "area",
+  //   });
 
   const handleSubmit = (event) => {
     console.log("at time of submission");
@@ -48,11 +48,12 @@ export const StarForm = () => {
     if (viewType === "constellation") {
       doParameters({ style: starStyle, constellation: query });
     } else {
-      doAreaParameters({
-        rightAscension: rightAscension,
-        declination: declination,
-        view: viewType,
-      });
+      alert("doMoonParameters!");
+      // doAreaParameters({
+      //   rightAscension: rightAscension,
+      //   declination: declination,
+      //   view: viewType,
+      // });
     }
 
     event.preventDefault();
@@ -65,14 +66,14 @@ export const StarForm = () => {
   const isFirstRender = useIsMount();
   return (
     <>
-      {(isError || isErrorArea) && <div>Something went wrong ...</div>}
-      {loading || loadingArea ? (
-        viewType === "area" ? (
-          <div>Loading the Area for you lad...</div>
-        ) : (
+      {isError && <div>Something went wrong ...</div>}
+      {loading ? (
+        viewType === "constellation" ? (
           <div>
             Loading the Constellation {constellations[query]} for you lad...
           </div>
+        ) : (
+          <div>Loading the Moon for you lad...</div>
         )
       ) : (
         <>
@@ -88,7 +89,7 @@ export const StarForm = () => {
                   onChange={(e) => handleViewForm(e)}
                 >
                   <option value="constellation">Constellation</option>
-                  <option value="area">Area</option>
+                  <option value="moon">Moon</option>
                 </Form.Select>
               </FloatingLabel>
               {/* if view type is constellation do this: */}
@@ -102,26 +103,19 @@ export const StarForm = () => {
                   />
                 ) : (
                   // Else if view type is area then find out the users ra, dec, and zoom
-                  <>
-                    <AreaForm
-                      rightAscension={rightAscension}
-                      setRightAscension={setRightAscension}
-                      declination={declination}
-                      setDeclination={setDeclination}
-                    />
-                    <MoonForm
-                      format={format}
-                      setFormat={setFormat}
-                      style={style}
-                      setStyle={setStyle}
-                      background={background}
-                      setBackground={setBackground}
-                      orientation={orientation}
-                      setOrientation={setOrientation}
-                      type={type}
-                      setType={setType}
-                    />
-                  </>
+
+                  <MoonForm
+                    format={format}
+                    setFormat={setFormat}
+                    style={style}
+                    setStyle={setStyle}
+                    background={background}
+                    setBackground={setBackground}
+                    orientation={orientation}
+                    setOrientation={setOrientation}
+                    type={type}
+                    setType={setType}
+                  />
                 )}
 
                 <Button variant="primary" type="submit" className="mb-3">
@@ -136,7 +130,8 @@ export const StarForm = () => {
                   fluid
                   rounded
                   className="border border-info"
-                  src={viewType === "constellation" ? imageUrl : imageAreaUrl}
+                  src={imageUrl}
+                  // src={viewType === "constellation" ? imageUrl : imageAreaUrl}
                   alt={
                     viewType === "constellation"
                       ? `constellation ${constellations[query]}`
