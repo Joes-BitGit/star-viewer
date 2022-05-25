@@ -91,3 +91,9 @@ export const constellations = {
   Vul: "Vulpecula",
 };
 export const StarStyles = ["default", "inverted", "navy", "red"];
+
+export const moonFormat = ["png", "svg"];
+export const moonStyle = ["default", "sketch", "shaded"];
+export const backgroundStyle = ["stars", "solid"];
+export const moonType = ["portrait-simple", "landscape-simple"];
+export const moonOrientation = ["north-up", "south-up"];
